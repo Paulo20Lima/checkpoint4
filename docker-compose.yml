@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: cp4-mysql
+    environment:
+      MYSQL_DATABASE: cp4
+      MYSQL_USER: cp4
+      MYSQL_PASSWORD: cp4
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: always
+
+  api:
+    image: paulo20lima/checkpoint4:1.0  # <--- imagem publicada no Docker Hub
+    container_name: cp4-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cp4
+      SPRING_DATASOURCE_USERNAME: cp4
+      SPRING_DATASOURCE_PASSWORD: cp4
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    restart: always
+
+volumes:
+  dbdata:
