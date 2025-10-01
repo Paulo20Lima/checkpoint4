@@ -64,7 +64,6 @@ docker-compose up --build
 docker-compose down
 ```
 
-4. A API estará disponível em: [http://localhost:8080](http://localhost:8080)
 
 ---
 
