@@ -55,7 +55,7 @@ cd checkpoint4
 2. **Subir os containers:**
 
 ```
-docker-compose up -d
+docker-compose up --build
 ```
 
 3. **Parar os containers:**
