@@ -1,45 +1,40 @@
-name: CD - Publicar no Docker Hub
+name: CD - Publicar imagem Docker (Checkpoint4)
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  docker:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - name: Checkout código
+        uses: actions/checkout@v3
 
-      
-      - name: Configurar QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Instalar Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
 
-      - name: Configurar Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Build do projeto com Maven
+        run: mvn -B package --file pom.xml -DskipTests
 
-      
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      
-      - name: Definir nome e tag da imagem
-        id: meta
-        run: |
-          echo "IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/checkpoint4" >> $GITHUB_OUTPUT
-          echo "TAG=latest" >> $GITHUB_OUTPUT
-
-      
-      - name: Construir e enviar imagem Docker
-        uses: docker/build-push-action@v6
+      - name: Build e Push da imagem Docker
+        uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.IMAGE_NAME }}:${{ steps.meta.outputs.TAG }}
+          tags: paulo20lima/checkpoint4:latest
