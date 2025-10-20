@@ -1,5 +1,6 @@
 name: Release e Tag
 
+
 on:
   push:
     branches:
@@ -10,9 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      
       - name: Checkout do código
         uses: actions/checkout@v3
 
+      
       - name: Configurar Java
         uses: actions/setup-java@v3
         with:
@@ -20,13 +23,16 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      
       - name: Gerar documentação
         run: mvn javadoc:javadoc
 
+      
       - name: Criar Tag e Release
-        id: create_release
+        id: create_releasegi
         uses: ncipollo/release-action@v1
         with:
           tag: v1.${{ github.run_number }}
           name: Release v1.${{ github.run_number }}
           body: "Release automática gerada pelo GitHub Actions"
+          token: ${{ secrets.GH_RELEASE_TOKEN }}
