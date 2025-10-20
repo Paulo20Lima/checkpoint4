@@ -1,0 +1,26 @@
+name: CI - Build e Testes
+
+on:
+  push:
+    branches:
+      - develop
+      - feature
+      - hotfix
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build e testes Maven
+        run: mvn clean verify
