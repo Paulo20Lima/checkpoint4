@@ -10,13 +10,36 @@ API REST em **Spring Boot** para gerenciamento de tarefas com banco **MySQL**.
 * **Pedro Cavariani** | RM 551380
 
 ---
-
 ## 📋 Pré-requisitos
 
 * Docker instalado
 * Docker Compose instalado (para execução com múltiplos containers)
 
 ---
+
+## ✅ Testes
+
+Os testes unitários rodam com H2 em memória (`src/test/resources/application.properties`).  
+CI (Continuous Integration) é executado automaticamente no GitHub Actions ao dar push nas branches: `develop`, `feature` e `hotfix`.  
+
+## ⚡ Continuous Delivery e Release
+
+### Continuous Delivery (CD)
+
+Ao criar um pull request para a branch `main`, o GitHub Actions automaticamente:
+
+- Constrói a aplicação
+- Empacota a imagem Docker
+- Publica no Docker Hub
+
+### Release Automática
+
+Ao push na branch `main`, o GitHub Actions gera automaticamente:
+
+- Documentação da versão (Javadoc)
+- Tag de Release no GitHub
+- Mensagem automática descrevendo a versão
+
 
 ## 🚀 Executando via Docker Hub
 
